@@ -1,8 +1,9 @@
 #!/bin/bash
-# Quick Docker test - runs leaders against real MK1/MK2/MK3 engine
 set -e
-cd "$(dirname "$0")/../../game/extracted/COMP34612_Student"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+PROJ="$ROOT/game/extracted/COMP34612_Student/project_files"
 docker run --rm --platform linux/amd64 \
-  -v "$(pwd)/project_files:/app" \
-  -v "$(pwd)/test_harness.py:/app/test_harness.py" \
-  stackelberg-test
+  -v "$PROJ:/app" \
+  -v "$ROOT/game/src/leaders.py:/app/leaders_code.py" \
+  -v "$ROOT/game/tests/test_runner.py:/app/test_runner.py" \
+  stackelberg-test python3 /app/test_runner.py
