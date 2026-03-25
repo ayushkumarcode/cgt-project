@@ -32,6 +32,7 @@ class AdaptiveLeader(Leader):
         self._filter_outliers()
         self._detect_time_trend()
         self._fit_ols()
+        self._compute_metrics()
 
     def _filter_outliers(self):
         uF = np.array(self.hist_uF)
@@ -63,6 +64,17 @@ class AdaptiveLeader(Leader):
         self.sigma2 = max(np.var(res), 1e-6)
         n = 3 if self.use_time else 2
         self.P = np.linalg.inv(X.T @ X / self.sigma2 + np.eye(n) * 0.001)
+
+    def _compute_metrics(self):
+        uL = np.array(self.all_uL)
+        uF = np.array(self.all_uF)
+        pred = self.alpha + self.beta * uL
+        if self.use_time:
+            pred += self.gamma * np.array(self.all_dates)
+        res = uF - pred
+        self.rmse = np.sqrt(np.mean(res**2))
+        self.mape = np.mean(np.abs(res) / np.maximum(np.abs(uF), 1e-6))
+        self.r_squared = 1 - np.var(res) / max(np.var(uF), 1e-6)
 
     def _optimal_price(self, date=115):
         a = self.alpha + self.gamma * date
