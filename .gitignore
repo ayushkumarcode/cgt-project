@@ -1,0 +1,15 @@
+.DS_Store
+__pycache__/
+*.pyc
+*.so
+pyarmor_runtime_000000/
+*.xlsx
+extracted/
+course_details/
+node_modules/
+.env
+*.egg-info/
+dist/
+build/
+run/
+results.xlsx
