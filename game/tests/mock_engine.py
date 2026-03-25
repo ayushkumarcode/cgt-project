@@ -1,4 +1,5 @@
 """Mock engine for local testing without Docker."""
+import gc
 import numpy as np
 
 
@@ -32,3 +33,19 @@ class SqrtFollower(MockFollower):
 
     def response(self, date, u_L):
         return self.a + self.b * np.sqrt(max(u_L, 0.01)) + self.rng.normal(0, self.noise)
+
+
+class MockEngine:
+    """Simulates the game engine for local testing."""
+
+    def __init__(self, follower, hist_leader_prices=None):
+        self.follower = follower
+        self.prices = {}
+        rng = np.random.RandomState(0)
+        for t in range(1, 101):
+            uL = 1.72 + rng.random() * 0.18 if hist_leader_prices is None else hist_leader_prices[t - 1]
+            uF = follower.response(t, uL)
+            self.prices[t] = (uL, uF)
+
+    def exposed_get_price(self, date):
+        return self.prices.get(date, (0.0, 0.0))
