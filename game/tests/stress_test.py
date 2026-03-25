@@ -34,3 +34,20 @@ class MockEngine:
 
     def exposed_get_price(self, date):
         return self.prices.get(date, (0.0, 0.0))
+
+def run_mock(name, fn, noise, trend=0.0, ub=float('inf')):
+    eng = MockEngine(fn, noise, trend=trend)
+    cls = [s for s in Leader.__subclasses__() if s.__name__=='AdaptiveLeader'][0]
+    ldr = cls(cls.__name__, eng); ldr.UPPER_BOUND = ub
+    ldr.engine = eng; ldr.start_simulation()
+    tot, opt = 0.0, 0.0
+    for t in range(101, 131):
+        uL = ldr.new_price(t)
+        uF = fn(uL) + trend*t + eng.rng.normal(0, noise)
+        eng.prices[t] = (uL, uF)
+        tot += (uL-1)*(100-5*uL+3*uF)
+        bp = max((u-1)*(100-5*u+3*(fn(u)+trend*t))
+                 for u in np.arange(1, min(ub,50)+.5, .5))
+        opt += bp
+    pct = tot/opt*100 if opt > 0 else 0
+    print(f'  {name:<35s} {tot:>9.0f}/{opt:>9.0f} = {pct:>5.1f}%')
