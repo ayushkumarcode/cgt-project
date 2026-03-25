@@ -49,3 +49,17 @@ class MockEngine:
 
     def exposed_get_price(self, date):
         return self.prices.get(date, (0.0, 0.0))
+
+    def run_game(self, leader, days=range(101, 131)):
+        leader.engine = self
+        leader.start_simulation()
+        results = []
+        for t in days:
+            uL = leader.new_price(t)
+            uF = self.follower.response(t, uL)
+            self.prices[t] = (uL, uF)
+            sL = 100 - 5 * uL + 3 * uF
+            profit = (uL - 1) * sL
+            results.append((t, uL, uF, profit))
+        leader.end_simulation()
+        return results
