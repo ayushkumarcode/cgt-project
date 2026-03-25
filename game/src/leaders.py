@@ -60,8 +60,6 @@ class AdaptiveLeader(Leader):
         theta += gain * err
         self.alpha, self.beta = theta[0], theta[1]
         self.P = (self.P - np.outer(gain, x @ self.P)) / self.lam
-        self.all_uL.append(uL)
-        self.all_uF.append(uF)
 
     def new_price(self, date):
         if date > 101:
@@ -75,9 +73,8 @@ class AdaptiveLeader(Leader):
         if date == 101:
             return min(10.0, self.UPPER_BOUND)
         if date == 102:
-            prev_uL, prev_uF = self.get_price_from_date(101)
-            self._rls_update(prev_uL, prev_uF)
             hist_mean = np.mean(self.hist_uF)
+            prev_uF = self.all_uF[-1]
             slope_est = (prev_uF - hist_mean) / (10.0 - np.mean(self.hist_uL))
             if slope_est > 0.15:
                 return min(20.0, self.UPPER_BOUND)
