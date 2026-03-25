@@ -27,3 +27,13 @@ class AdaptiveLeader(Leader):
         self.all_uL = list(self.hist_uL)
         self.all_uF = list(self.hist_uF)
         self._fit_ols()
+
+    def _fit_ols(self):
+        uL = np.array(self.all_uL)
+        uF = np.array(self.all_uF)
+        X = np.column_stack([np.ones_like(uL), uL])
+        theta = np.linalg.lstsq(X, uF, rcond=None)[0]
+        self.alpha, self.beta = theta[0], theta[1]
+        res = uF - X @ theta
+        self.sigma2 = max(np.var(res), 1e-6)
+        self.P = np.linalg.inv(X.T @ X / self.sigma2 + np.eye(2) * 0.001)
