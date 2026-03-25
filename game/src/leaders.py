@@ -119,3 +119,19 @@ class AdaptiveLeader(Leader):
 class BoundedAdaptiveLeader(AdaptiveLeader):
     """For MK3/MK6: strategy space [1.00, 15.00]."""
     UPPER_BOUND = 15.0
+
+
+class ThompsonSamplingLeader(AdaptiveLeader):
+    """Thompson Sampling: sample from posterior for exploration."""
+
+    def _optimal_price(self, date=115):
+        a0 = self.alpha + self.gamma * date
+        P2 = self.P[:2, :2] if self.P.shape[0] > 2 else self.P
+        s = np.random.multivariate_normal([a0, self.beta], P2 * self.sigma2)
+        a_s, b_s = s[0], s[1]
+        d = 10 - 6 * b_s
+        uL = (105 + 3*a_s - 3*b_s) / d if d > 0.5 else 50.0
+        uL = max(1.01, min(uL, self.UPPER_BOUND))
+        if 100 - 5*uL + 3*(a_s + b_s*uL) < 5:
+            uL = max(1.01, (95 + 3*(a_s + b_s*uL)) / 5)
+        return min(uL, self.UPPER_BOUND)
