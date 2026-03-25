@@ -107,7 +107,7 @@ class AdaptiveLeader(Leader):
             self.all_uL.append(prev_uL)
             self.all_uF.append(prev_uF)
             self.all_dates.append(date - 1)
-            if date <= 105 or (date - 101) % 5 == 0:
+            if date <= 105 or (date - 101) % 3 == 0:
                 self._fit_ols()
             else:
                 self._rls_update(prev_uL, prev_uF)
