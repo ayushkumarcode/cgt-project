@@ -50,3 +50,17 @@ for mk in ['MK1', 'MK2', 'MK3']:
     arr = np.array(profits)
     print(f"  {mk}: mean={arr.mean():.0f} std={arr.std():.0f}"
           f" min={arr.min():.0f} max={arr.max():.0f}")
+
+# 2. CONVERGENCE: daily price trajectory in TEST mode
+print("\n=== DAILY CONVERGENCE (TEST mode) ===")
+for mk in ['MK1', 'MK2', 'MK3']:
+    cls = bounded if mk == 'MK3' else main
+    result, total = run(cls, mk, cnst.Mode.TEST)
+    print(f"\n  {mk} (total={total:.0f}):")
+    print(f"  {'Day':>5} {'uL':>8} {'uF':>8} {'Profit':>8} {'Cum':>10}")
+    cum = 0
+    for d, uL, uF, c in result:
+        p = (uL - c) * (100 - 5*uL + 3*uF)
+        cum += p
+        if d <= 105 or d % 5 == 0 or d == 130:
+            print(f"  {d:5d} {uL:8.2f} {uF:8.2f} {p:8.1f} {cum:10.1f}")
