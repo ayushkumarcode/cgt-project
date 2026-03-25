@@ -50,3 +50,15 @@ class AdaptiveLeader(Leader):
         if 100 - 5 * uL + 3 * uF_pred < 5:
             uL = (95 + 3 * uF_pred) / 5
         return max(1.01, min(uL, self.UPPER_BOUND))
+
+    def _rls_update(self, uL, uF):
+        x = np.array([1.0, uL])
+        Px = self.P @ x
+        gain = Px / (self.lam + x @ Px)
+        err = uF - (self.alpha + self.beta * uL)
+        theta = np.array([self.alpha, self.beta])
+        theta += gain * err
+        self.alpha, self.beta = theta[0], theta[1]
+        self.P = (self.P - np.outer(gain, x @ self.P)) / self.lam
+        self.all_uL.append(uL)
+        self.all_uF.append(uF)
