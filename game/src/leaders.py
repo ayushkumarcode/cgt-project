@@ -92,3 +92,8 @@ class AdaptiveLeader(Leader):
         if date == 101:
             return min(12.0, self.UPPER_BOUND)
         return self._optimal_price(date)
+
+
+class BoundedAdaptiveLeader(AdaptiveLeader):
+    """For MK3/MK6: strategy space [1.00, 15.00]."""
+    UPPER_BOUND = 15.0
