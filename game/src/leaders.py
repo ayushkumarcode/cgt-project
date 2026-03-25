@@ -54,8 +54,9 @@ class AdaptiveLeader(Leader):
         n = 3 if self.use_time else 2
         self.P = np.linalg.inv(X.T @ X / self.sigma2 + np.eye(n) * 0.001)
 
-    def _optimal_price(self):
-        a, b = self.alpha, self.beta
+    def _optimal_price(self, date=115):
+        a = self.alpha + self.gamma * date
+        b = self.beta
         denom = 10 - 6 * b
         if denom < 0.5:
             uL = 50.0
@@ -82,6 +83,7 @@ class AdaptiveLeader(Leader):
             prev_uL, prev_uF = self.get_price_from_date(date - 1)
             self.all_uL.append(prev_uL)
             self.all_uF.append(prev_uF)
+            self.all_dates.append(date - 1)
             if (date - 101) % 5 == 0:
                 self._fit_ols()
             else:
@@ -95,4 +97,4 @@ class AdaptiveLeader(Leader):
             if slope_est > 0.15:
                 return min(20.0, self.UPPER_BOUND)
             self._fit_ols()
-        return self._optimal_price()
+        return self._optimal_price(date)
