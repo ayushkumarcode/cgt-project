@@ -6,4 +6,5 @@ docker run --rm --platform linux/amd64 \
   -v "$PROJ:/app" \
   -v "$ROOT/game/src/leaders.py:/app/leaders_code.py" \
   -v "$ROOT/game/tests/test_runner.py:/app/test_runner.py" \
+  -v "$ROOT/game/tests/benchmarks.py:/app/benchmarks.py" \
   stackelberg-test python3 /app/test_runner.py

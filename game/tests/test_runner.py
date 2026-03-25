@@ -22,6 +22,10 @@ class Leader:
         return self.engine.exposed_get_price(date)
 
 exec(open('/app/leaders_code.py').read())
+try:
+    exec(open('/app/benchmarks.py').read())
+except FileNotFoundError:
+    pass
 
 from engine import Engine
 import constants as cnst
