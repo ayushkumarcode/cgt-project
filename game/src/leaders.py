@@ -70,11 +70,17 @@ class _AdaptiveCore:
         a = self.alpha + self.gamma * date
         b = self.beta
         denom = 10 - 6 * b
-        uL = (105 + 3 * a - 3 * b) / denom if denom > 0.5 else 50.0
+        if denom > 0.1:
+            uL = (105 + 3 * a - 3 * b) / denom
+        else:
+            # beta >= 5/3: demand grows with u_L, ramp up gradually
+            prev_uL = self.all_uL[-1] if self.all_uL else 12.0
+            uL = prev_uL * 1.5  # 50% increase each day
         uL = max(1.01, min(uL, self.UPPER_BOUND))
-        if 100 - 5 * uL + 3 * (a + b * uL) < 5:
-            uL = (95 + 3 * (a + b * uL)) / 5
-        return max(1.01, min(uL, self.UPPER_BOUND))
+        uF_pred = a + b * uL
+        if 100 - 5 * uL + 3 * uF_pred < 5:
+            uL = max(1.01, (95 + 3 * uF_pred) / 5)
+        return min(uL, self.UPPER_BOUND)
 
     def _rls_update(self, uL, uF):
         x = np.array([1.0, uL])
