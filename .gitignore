@@ -4,6 +4,9 @@ __pycache__/
 *.so
 pyarmor_runtime_000000/
 *.xlsx
+~$*
+presentation_prompt.md
+presentation_blueprint.txt
 extracted/
 course_details/
 node_modules/
