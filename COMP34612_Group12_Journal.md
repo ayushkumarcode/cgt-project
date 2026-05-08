@@ -4,7 +4,7 @@
 **Project:** Adaptive Stackelberg Pricing under Imperfect Information  
 **Submission item:** Group journal / written materials  
 
-> The member labels below can be replaced with names before submitting on Blackboard.
+> Student ID numbers are intentionally omitted here. Add them only if Blackboard specifically requires them in the journal text.
 
 ## 1. Group Organisation and Task Distribution
 
@@ -12,10 +12,10 @@
 
 | Member | Main Responsibilities |
 |---|---|
-| Member 1 | Overall algorithm design, Stackelberg pricing derivation, final integration |
-| Member 2 | Historical-data analysis, OLS/RLS implementation, parameter tuning |
-| Member 3 | Testing framework, hidden-follower stress tests, performance evaluation |
-| Member 4 | Presentation/journal preparation, literature links, Colab submission checks |
+| Ayush Kumar | Overall algorithm design, Stackelberg pricing derivation, exploration probe design, final integration, submission engineering |
+| Ansh Rastogi | Recursive least squares implementation, time-trend detection, online-learning refinements |
+| Harshita Dassani | Stress-test suite, bounded-follower scenarios, hidden-follower robustness checks |
+| Sahil Saxena | Benchmark leaders, evaluation harness, model-quality metrics, ablation evidence |
 
 We used a multiple-leader submission structure:
 
@@ -265,14 +265,14 @@ The project was effective because it forced us to connect theory to a working sy
 
 ## 9. Contribution Summary
 
-The marking scheme says no separate unequal-contribution email is needed if contributions were roughly even. The table below records an equal-contribution assumption; edit it before submission if that is not accurate.
+The marking scheme says no separate unequal-contribution email is needed if contributions were roughly even. Our working split was not identical, because the integration role carried extra workload, but all members made substantial contributions.
 
 | Member | Contribution Percentage | Main Contributions |
 |---|---:|---|
-| Member 1 | 25% | Algorithm design, Stackelberg pricing derivation, final integration |
-| Member 2 | 25% | Historical-data analysis, OLS/RLS implementation, parameter tuning |
-| Member 3 | 25% | Testing framework, hidden-follower stress tests, performance evaluation |
-| Member 4 | 25% | Presentation/journal preparation, literature links, Colab submission checks |
+| Ayush Kumar | 40% | Algorithmic core, Stackelberg derivation, exploration probe, mixin architecture, steep-slope safety branch, notebook/repository submission checks |
+| Ansh Rastogi | 20% | RLS update, forgetting-factor work, time-trend detector, adaptive-learning section of the presentation |
+| Harshita Dassani | 20% | Stress testing, bounded-follower checks, hidden-follower robustness analysis, robustness presentation section |
+| Sahil Saxena | 20% | Naive benchmark, 20-run evaluation harness, RMSE/MAPE/R-squared metrics, ablation and final-results evidence |
 
 ## 10. Final Statement
 
